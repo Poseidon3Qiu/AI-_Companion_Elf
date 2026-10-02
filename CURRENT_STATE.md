@@ -4,6 +4,43 @@ Last updated: 2026-10-02
 
 This file is the authoritative running state record for Project Companion. Historical learning notes, experimental decisions, completed milestones, and current development direction are retained so future work can resume without reconstructing prior context.
 
+## Recovery Snapshot — 2026-10-02
+
+| Item | Current state |
+| --- | --- |
+| Current Phase | C0 complete as an educational baseline; C1 beginning: Artificial Continuity |
+| Active Experiment | First quantized Local Brain measurement and minimal Brain Interface; not yet reported complete |
+| Current Goal | First working response, measured local feasibility, replaceable backend boundary |
+| Architecture / decisions | Local Companion Core owns continuity; Local / Cloud / API Brain supplies replaceable intelligence; Persistent State + Learning Dynamics + Replaceable Intelligence |
+| Completed milestones | Project Genesis README; tokenizer; C0 end-to-end 10-step sanity run; saved checkpoint; Git/GitHub merged baseline |
+| Open questions | Local candidate feasibility; minimal interface; memory write control/provenance; individuality measurement; Brain-Swap continuity; retrieval trigger |
+| Resume Point | Quantized Local Brain → measurements → generate(context) → replacement test → persistent experience → observed retrieval problem → embeddings if justified |
+
+**Evidence boundary:** historical experiment/Git results below are preserved from project records and recovered chat text, not rerun or live-verified in this document task. C1 architecture is a direction, not a completed implementation. Model/provider/price availability must be checked when an actual execution decision is made.
+
+## Mission / Restored Long-Term Research Context
+
+Build an AI that can be owned, understood, shaped, and grown by an individual. Initial motivation includes Pokémon, Digimon, and 御兽 / intelligent companion fiction. Preserve individuality and shared history rather than reducing the goal to a UI wrapper or a system prompt.
+
+- **Track A — Personal / Open LLM:** Transformer, pretraining, post-training, SFT / LoRA / DPO / RL, Identity, Personality, Memory, Continual Learning, multimodal and agents.
+- **Track B — AI-native Computing:** architecture, OS, compilers, LLVM / MLIR, GPU / CUDA, distributed systems, program synthesis, learned systems and AI-native runtime. Research AI-oriented computation representations while retaining correctness, auditing and verification constraints.
+- **Identity:** where does continuity reside: weights, context, memory, or other structures?
+- **Personality:** how can stable behavior emerge through experience rather than only prompting?
+- **Memory:** episodic / semantic / autobiographical organization and provenance.
+- **Growth:** adaptation through interaction without catastrophic forgetting.
+- **Individuality:** different experience histories under the same base model.
+- **Ownership:** export, backup, migration and practical offline survival.
+
+Use objective critique; do not treat enthusiasm as proof of feasibility or individuality. The user's request explicitly preserves the non-flattery requirement; its original full discussion is unavailable in the recovered excerpts.
+
+## Restored Learning / Measurement Records
+
+The tokenizer conversation records: total tokens **10,956,351**; average tokens/story **219.12702**; total characters **44,478,696**; characters/token **4.059626786326944**. These describe the reported corpus-tokenization measurement, not the 10-step training token count. The exact counting treatment of inserted EOS is not recoverable here.
+
+A concrete teaching correction established **Understand → Build → Verify → Module Complete**. Conceptual understanding is not component completion. The assistant should actively identify when theory is sufficient, when a module is verified, and when a new conversation is useful. Do not repeat the earlier mistake of moving to Transformer before building/verifying the tokenizer.
+
+API credentials provide access to hosted inference; text tokens are the units processed by the language model. API access alone is not ownership of weights or persistent Companion identity. The original detailed API-token discussion is unavailable; preserve this boundary without inventing its wording.
+
 ## Current Phase
 
 **Companion-0: COMPLETE — educational / experimental baseline retained.**
@@ -410,16 +447,17 @@ Acceleration preference:
 
 # Immediate Next Step / Resume Point
 
-**Begin Companion-1: implement the minimal Brain Interface, then connect the first open-weight foundation model so Companion-1 can speak.**
+**Run and measure the first quantized Local Brain, then wrap it behind `generate(context)`.**
 
-1. Define the single initial entry point: `generate(context)`.
-2. Implement one backend for the first candidate brain, Qwen3.5-9B, choosing execution resources according to actual memory, latency, setup, and cost requirements.
-3. Run a first real interaction through the interface and record its output and practical limitations.
-4. Let observed interaction problems determine the next capability and the research needed to add it.
+1. Attempt the historical candidate **Qwen3.5-9B MLX 4-bit** on M1 Pro / 16 GB; verify the exact obtainable artifact and runtime at execution time. Candidate selection is not a completed integration.
+2. Record model/version, quantization, file size, memory pressure, load time, generation speed, and stability; use a smaller candidate if needed.
+3. Implement the single minimal Brain Interface entry point `generate(context)` around the working backend.
+4. Test backend replacement without changing Companion-level calling code.
+5. Begin controlled persistent experience recording; add retrieval and embeddings only when real retrieval needs appear.
 
-Keep the backend replaceable across Local / Cloud / API. Do not bind Companion continuity to Qwen3.5-9B or any commercial provider. Do not build the full Memory / Identity / Learning / Agent system in advance; implement the minimal Brain Interface first, then let real interaction drive the smallest experiments needed for C1 Artificial Continuity.
+Do not prebuild full Memory / Identity / Learning / Agent infrastructure. Keep Local / Cloud / API backends replaceable. This sequence supersedes the earlier interface-first shorthand while preserving the same minimal-boundary goal.
 
-Historical resume point, now completed: Training Loss → cross-entropy → backpropagation / gradients → optimizer updates → first training loop → checkpoint → autoregressive inference.
+Historical resume point, completed: loss → backward → optimizer → training → checkpoint → autoregressive inference.
 
 ---
 
@@ -781,6 +819,249 @@ They must not become Companion's permanent sole dependency.
 
 Keep the Brain Interface replaceable so Local, Cloud, and API backends can be swapped without redefining Companion itself.
 
+
+# Development Rhythm — Continuous Progress / Spiral Learning
+
+Project Companion is a long-term project, but development must not become a long waiting period for any single long-term experiment.
+
+Core rhythm:
+
+```text
+Short-cycle Build / Learn / Experiment / Discovery
+                    +
+Spiral revisiting of earlier topics
+                    +
+Longitudinal experiments accumulating in parallel
+```
+
+Long-term research questions must run in the background while active development continues. Time should be a by-product of continued Companion use and experimentation, not the main daily task.
+
+A normal development session should aim to produce at least one meaningful form of progress: a working capability, understanding of a necessary AI concept, a controlled experiment or measurement, a reproduced research mechanism, a discovered failure mode, an improved architecture decision, or a sharper research question.
+
+Do not remain in one domain merely to accumulate elapsed time. Revisit Memory, Identity, Reflection, Learning, Brain architecture, safety, evaluation, and other topics in increasingly deeper passes as the project exposes new needs.
+
+**Control variables at the experiment level, not by freezing the entire Project roadmap.**
+
+Longitudinal questions such as whether individuality becomes more stable after months of interaction should accumulate measurements naturally in parallel with daily development. The project does not pause while waiting for those later checkpoints.
+
+---
+
+# Local Companion Core / Replaceable Cloud Brain
+
+The preferred architectural direction is to separate persistent Companion continuity from heavy foundation-model inference.
+
+```text
+LOCAL — COMPANION CORE
+    Identity
+    Memory
+    History / Experience
+    Preferences
+    Reflection records
+    Learning history
+    Relationship history
+    Memory provenance
+    Context Builder
+    Memory Manager
+    Brain Interface
+            │
+            │ selected working context
+            ▼
+CLOUD / REMOTE COMPUTE
+    Replaceable Foundation Model
+    GPU / inference runtime
+            │
+            ▼
+        Response
+            │
+            ▼
+LOCAL — COMPANION CORE
+    Evaluate
+    Reflect
+    Produce memory candidates
+    Update controlled persistent state
+```
+
+Architectural principles:
+
+**Cloud provides compute; Local owns continuity.**
+
+**Rent compute, not the Companion.**
+
+The local Companion Core should remain the source of truth for persistent individual state wherever practical. Foundation models may be hosted on rented cloud GPUs, local hardware, or external APIs without redefining the Companion itself.
+
+The Brain Interface should support multiple deployment classes over time:
+
+```text
+Local Brain
+Own / rented Cloud GPU + open-weight Brain
+External commercial API Brain
+```
+
+Open-weight models hosted on cloud compute are especially useful for experiments requiring a frozen model version, controlled inference configuration, future LoRA / SFT work, or deeper model access without requiring the local Mac to host the full model.
+
+Commercial frontier APIs may still be used for comparison, difficult tasks, auxiliary reasoning, and Brain-Swap experiments, but they must not become the sole owner or storage location of Companion continuity.
+
+## Context Boundary / Privacy Principle
+
+Local storage does **not** imply that persistent information never leaves the machine.
+
+A remote Brain can reason only over information sent to it. Therefore the Companion should eventually develop a controlled context boundary:
+
+```text
+Complete Local Persistent State
+            ↓
+      Context Builder
+            ↓
+   Context / Privacy Filter
+            ↓
+Minimum Necessary Working Context
+            ↓
+        Remote Brain
+```
+
+Future work may evolve this into a Context Firewall considering relevance, sensitivity, permissions, provenance, and minimum-necessary disclosure.
+
+The remote Brain receives temporary working context; it does not become the authoritative store for Identity, Memory, History, or Learning State.
+
+This architecture preserves the central C1 principle:
+
+**Replacing the Brain must not mean killing the Companion.**
+
+
+
+# Companion-1 — Local Brain Constraint and Cloud Scope
+
+## Local Brain Is Required
+
+A local foundation model remains an important part of Project Companion even if larger cloud-hosted models perform most heavy experiments.
+
+The Local Brain is not intended to replace the main Cloud Brain. Its roles include:
+
+- local and offline experimentation;
+- privacy-sensitive experiments;
+- testing Brain Interface independence;
+- learning inference and quantization directly;
+- providing a degraded fallback Brain when remote compute is unavailable;
+- running experiments that are practical within local hardware limits.
+
+### Current Local Hardware Constraint
+
+Current development hardware:
+
+```text
+MacBook Pro
+Apple M1 Pro
+16 GB unified memory
+```
+
+A 7B/9B-class model must not be treated as if FP16 deployment were practical on this machine.
+
+Approximate weight-only memory:
+
+```text
+7B FP16 ≈ 14 GB
+9B FP16 ≈ 18 GB
+```
+
+This excludes macOS, runtime overhead, KV cache, activations, and other memory requirements.
+
+Therefore the practical Local Brain direction is:
+
+```text
+M1 Pro / 16 GB
+      ↓
+quantized foundation model
+      ↓
+approximately 7B–9B class when practical
+```
+
+4-bit quantization is the intended starting direction. Exact model size, memory pressure, generation speed, and stability must be measured experimentally rather than assumed.
+
+The first current candidate is:
+
+```text
+Qwen3.5-9B
+MLX
+4-bit quantized
+```
+
+This remains a **candidate**, not a permanent architectural commitment. If real measurements show unacceptable memory pressure or performance, a smaller model such as a 4B-class model may be used.
+
+The first Local Brain experiment should record at least:
+
+- exact model/version;
+- quantization;
+- model size;
+- memory pressure;
+- load time;
+- generation speed;
+- stability.
+
+## Cloud Scope Discipline
+
+Do not prematurely turn Project Companion into a multi-cloud infrastructure project.
+
+The Companion architecture requires a replaceable Brain interface, not simultaneous operational support for many cloud providers.
+
+Current rule:
+
+```text
+Companion main line
+    =
+Local experimental Brain
+    +
+at most one primary Cloud GPU environment when actually needed
+```
+
+Runpod, Oracle Cloud, Google Colab, Azure, GCP, or other providers may be evaluated when a concrete experiment requires remote compute. Cloud-provider selection should be made just in time using the actual model, VRAM, training/inference, runtime, student-credit, and current-price requirements.
+
+Oracle Cloud remains potentially useful for learning standard cloud infrastructure, but that learning objective should not automatically become part of the Companion critical path.
+
+Colab may be used for temporary notebook experiments without becoming a permanent Companion architecture dependency.
+
+**Cloud infrastructure is replaceable infrastructure.**
+
+Do not optimize GPU pricing months in advance. Re-check available providers, GPU availability, student/research credits, and current prices when an experiment actually requires them.
+
+## Immediate Execution Sequence
+
+The near-term sequence is intentionally small and project-first:
+
+```text
+1. Run the first quantized Local Brain
+        ↓
+2. Measure real local constraints
+        ↓
+3. Wrap it behind the minimal Brain Interface
+   generate(context)
+        ↓
+4. Replaceability test
+   swap Brain without changing Companion-level calling code
+        ↓
+5. Record the first persistent experiences
+        ↓
+6. Encounter real retrieval problems as memory grows
+        ↓
+7. Learn and introduce retrieval / embeddings when the problem requires them
+```
+
+This ordering follows the project development rhythm:
+
+```text
+Build
+  ↓
+Encounter a real problem
+  ↓
+Learn the required concept
+  ↓
+Experiment
+  ↓
+Improve Companion
+```
+
+Embedding is expected to become important, but it is not treated as a prerequisite that must be studied before the Companion has a working Brain and persistent experience.
+
+
 # Companion-1 — Artificial Continuity
 
 Companion-1 is now framed primarily as a long-term research stage for **artificial continuity / artificial individual formation**, not as an attempt to compete with mature commercial Personal AI products.
@@ -988,48 +1269,51 @@ These remain optional baseline experiments rather than immediate Companion-1 pre
 
 Identity / Self, memory, experience, personality, context, tools, and learning mechanisms remain future research directions to be grounded in actual Companion interaction.
 
-The available baseline does not contain a separate Track B / Identity / Self history; no missing historical entries are invented in this update.
+Track B and initial Identity / Self questions are restored from the supplied project overview and AI-native computing reference. Detailed discussion history belongs in LOG.md; missing original dialogue is not invented.
 
 Previously overwritten material cannot be recovered from this file alone and should be merged if an older source is later recovered.
 
-# State File Update Policy
+# State / Log Update Policy — Effective 2026-10-02
 
-**“Update CURRENT_STATE.md” means deliver the complete full-text replacement by default.**
+When the user says **“更新 state and log”**, generate two complete Markdown files together:
 
-Use the existing file as the baseline.
+- `CURRENT_STATE.md`: use the latest full state as baseline; cumulatively preserve historical milestones, experiments, measurements, learning outcomes, architecture decisions, research questions, and Change Log. Update obsolete current descriptions with explicit evolution. Its primary purpose is seamless resumption in a new conversation.
+- `LOG.md`: a detailed, organized discussion journal for the current conversation through the update request, preserving initial ideas, competing views, accepted/rejected arguments, corrections, decisions, and open questions. Do not accumulate all previous LOG files into each new conversation log. Put creation date and conversation coverage at the beginning so the user can append it directly to a local master log.
 
-Retain:
+The first LOG is an explicit exception: a recovered project-wide baseline covering **Project Companion inception through 2026-10-02**. Later logs cover their own conversations unless the user asks otherwise.
 
-- valid historical information
-- experimental data
-- learning notes
-- research questions
-- architecture decisions
-- methodology
-- completed milestones
-- strategic changes
+STATE no longer has responsibility for storing detailed chat discussions indefinitely. The earlier Detailed Discussion Log Policy is superseded; its discussion content is migrated to `LOG.md`, while policy evolution remains in the Change Log. Historical state preservation still applies. This separation is not permission to discard experiments, learning, milestones, or architectural evolution.
 
-Append dated milestones and make targeted edits to obsolete current-status sections.
-
-Do not replace the accumulated record with a current-stage summary.
-
-Only an explicitly labeled:
-
-```text
-append-only content
-```
-
-or:
-
-```text
-仅追加内容
-```
-
-is a fragment rather than a full replacement.
-
-Record strategic changes in the Change Log so earlier decisions remain traceable.
+Deliver full files by default. An explicitly requested “仅追加内容” is the exception. Do not invent unavailable history, measurements, implementation status, or dates. Proposed architecture and completed implementation must remain distinct.
 
 # Change Log
+
+## 2026-10-02 — Local Brain Constraint, Cloud Scope, and Immediate Sequence
+
+- Confirmed that a **Local Brain is required** even though larger Cloud Brains are expected to handle most heavy experiments.
+- Corrected the local hardware assumption: the M1 Pro 16 GB machine should not treat FP16 7B/9B deployment as practical; the intended local path is quantized inference, initially targeting approximately 7B–9B-class models when measurements permit.
+- Selected **Qwen3.5-9B MLX 4-bit** as the first Local Brain candidate, subject to real memory, speed, and stability measurements; smaller models remain valid fallbacks.
+- Added an explicit rule to measure local model behavior rather than assuming feasibility from parameter count alone.
+- Reduced cloud scope: Project Companion should not become a multi-cloud project prematurely. Use at most one primary remote GPU environment when a concrete experiment requires it.
+- Oracle/Colab/other cloud environments are optional tools or separate learning opportunities rather than mandatory Companion architecture components.
+- Cloud provider and GPU selection should be made just in time based on actual experiment requirements and then-current prices/credits.
+- Clarified the immediate sequence: Local Brain → measurement → `generate(context)` Brain Interface → Brain replaceability test → first persistent experiences → retrieval problem → embeddings when justified by the real problem.
+- Reaffirmed project-first / just-in-time learning: do not turn Embedding or other future mechanisms into prerequisite study detached from an active Companion problem.
+
+
+## 2026-10-02 — Development Rhythm and Local-Core / Cloud-Brain Architecture
+
+- Established **short-cycle continuous progress + spiral learning + longitudinal experiments in parallel** as a project-level development principle.
+- Long-term research questions must not block active development or keep the project confined to one domain merely to accumulate elapsed time.
+- Clarified that experimental controls apply at the experiment level; the entire project does not need to remain frozen around one model or one research topic.
+- Defined the preferred architecture as **Local Companion Core / Replaceable Cloud Brain**.
+- Persistent state such as Identity, Memory, History / Experience, Reflection records, Learning History, Relationship History, and provenance should remain under Companion control and use the local system as the source of truth wherever practical.
+- Cloud infrastructure primarily supplies replaceable foundation-model inference and compute.
+- Added the ownership principle: **Cloud provides compute; Local owns continuity. Rent compute, not the Companion.**
+- Clarified that local persistence does not mean no data is ever transmitted: remote Brains require selected working context.
+- Added the future **Context Boundary / Context Firewall** direction so remote models receive controlled, minimum-necessary working context rather than owning the complete persistent state.
+- Preserved support for Local Brain, cloud-hosted open-weight Brain, and external API Brain behind the same replaceable Brain Interface.
+
 
 ## 2026-10-01 — Companion-0 Completion / Companion-1 Begins
 
@@ -1082,3 +1366,26 @@ Record strategic changes in the Change Log so earlier decisions remain traceable
 - Added the core research question: **What makes an artificial intelligence persist as an individual across time, experience, and changes of its underlying foundation model?**
 - Kept the immediate engineering resume point unchanged: implement the minimal `generate(context)` Brain Interface and attempt the first Qwen3.5-9B integration as a replaceable candidate, not a permanent commitment.
 
+
+
+
+# Historical Change Log — Policy Evolution Retained
+
+
+
+## 2026-10-02 — Detailed Discussion Log Policy Activated
+
+- Expanded `CURRENT_STATE.md` from cumulative decision/state preservation to two-layer preservation: current state plus detailed reasoning history.
+- Future updates must summarize important discussion chains: assumptions, critiques, constraints, accepted/rejected arguments, decisions, unresolved questions, and consequences.
+- Detailed Discussion Logs are cumulative and must survive later updates.
+- Added the first new-style discussion log covering cloud/free-resource discussion, M1 16 GB quantization constraints, multi-cloud scope reduction, GPU pricing timing, the Embedding sequencing disagreement, and the resulting execution order.
+
+## 2026-10-02 — STATE / LOG Separation Activated
+
+- Superseded the same-day Detailed Discussion Log Policy with two-file STATE / LOG updates triggered by “更新 state and log”.
+- Migrated the embedded Cloud / Local Brain / Embedding discussion into the first project-wide LOG baseline; STATE retains its architectural decisions and previous policy Change Log.
+- Preserved the supplied 1,479-line baseline's milestones, experiments, learning outcomes, architecture sections, and all existing Change Log entries.
+- Restored initial research tracks and motivation from project references; added recovered tokenizer metrics and Understand → Build → Verify correction.
+- Put current phase, active experiment, goal, architecture, milestones, open questions and resume sequence near the top.
+- Reconciled the old interface-first resume shorthand with the later agreed Local Brain → measurement → interface sequence.
+- Marked missing original dialogue and historical-vs-current verification boundaries explicitly.
