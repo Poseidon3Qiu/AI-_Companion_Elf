@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Training data
+data/
+
+# Model checkpoints
+*.pt
+*.pth
+*.ckpt
+
+# Temporary files
+temp.py
