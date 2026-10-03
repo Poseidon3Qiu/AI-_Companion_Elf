@@ -1,3 +1,387 @@
+# Project Companion --- LOG
+
+Created: 2026-10-02\
+Conversation coverage: Companion-1 local Brain setup through first
+Brain-Swap Test and transition to Persistent Experience.
+
+## 1. Starting Point
+
+The active C1 sequence was:
+
+``` text
+Quantized Local Brain
+→ measure local constraints
+→ minimal generate(context)
+→ replacement test
+→ persistent experience
+→ observe retrieval problem
+→ embeddings only if justified
+```
+
+The purpose was not to optimize one model. The purpose was to establish
+a replaceable intelligence boundary while preserving the larger C1
+research goal: artificial continuity.
+
+## 2. Repository Reorganization
+
+The completed Companion-0 baseline was moved under:
+
+``` text
+companion0/
+```
+
+and active Companion-1 work uses:
+
+``` text
+companion1/
+```
+
+The project-level `.venv`, Git repository, state files, and project
+documents remain shared.
+
+After the move, `companion0/model/generate.py` was run successfully. The
+tokenizer and saved checkpoint still loaded and generation still
+executed, confirming that the C0 baseline remained usable after
+reorganization.
+
+## 3. Python / MLX Environment Repair
+
+The existing project `.venv` was retained rather than creating another
+environment.
+
+Its pip installation was broken (`No module named pip._vendor`). The
+broken pip package files inside the project `.venv` were removed, pip
+was restored with `ensurepip`, and then upgraded.
+
+The project environment was verified to import MLX and MLX-VLM
+successfully.
+
+Relevant installed components included:
+
+``` text
+mlx 0.32.3
+mlx-metal 0.32.3
+mlx-vlm 0.7.4
+mlx-audio 0.5.7
+transformers 5.18.0
+```
+
+An accidental global Python package change was also cleaned up so the
+Companion experiment remained isolated from unrelated Python
+installations.
+
+## 4. First Local Brain --- Qwen3.5-9B 4-bit + MLX
+
+Selected model:
+
+``` text
+mlx-community/Qwen3.5-9B-4bit
+```
+
+Hardware:
+
+``` text
+MacBook Pro
+M1 Pro
+16 GB unified memory
+```
+
+The model downloaded and reconstructed successfully and produced a valid
+first response.
+
+Observed short-run measurements across several runs were approximately:
+
+``` text
+Generation speed: ~31–32 tokens/s
+MLX-reported peak memory: ~6.07 GB
+```
+
+Prompt throughput varied substantially between runs, so it was not
+treated as a stable benchmark.
+
+The important conclusion was limited: this quantized 9B-class model is
+practically runnable on the current machine for short inference tests.
+The experiment did not establish long-context behavior, sustained-load
+stability, or a final production model choice.
+
+## 5. Minimal Brain Backend
+
+`brain.py` was used for the MLX/Qwen backend.
+
+The initial public concept remained:
+
+``` python
+generate(context)
+```
+
+The model was later changed to lazy loading so importing the Brain layer
+would not automatically consume memory by loading Qwen when another
+backend was selected.
+
+Conceptually:
+
+``` text
+import backend
+→ no model load yet
+→ first MLX generate()
+→ load Qwen
+→ reuse loaded model on later calls
+```
+
+## 6. BrainResult
+
+A project-owned result type was introduced:
+
+``` text
+BrainResult
+```
+
+Its purpose is to prevent the rest of Companion from depending on the
+native return type of MLX, Ollama, or future providers.
+
+It currently supports fields such as:
+
+``` text
+text
+model
+backend
+prompt_tokens
+generation_tokens
+prompt_tps
+generation_tps
+peak_memory
+finish_reason
+```
+
+Backends are not required to fabricate measurements they do not
+currently expose. Unsupported values can remain `None`.
+
+This was an important refinement: having two functions both named
+`generate(context)` is not enough if they return incompatible
+structures.
+
+## 7. Second Local Brain --- Llama 3.1 8B + Ollama
+
+Ollama was already installed, but initially had no models.
+
+Downloaded:
+
+``` text
+llama3.1:8b
+```
+
+The model successfully responded through:
+
+``` text
+ollama run llama3.1:8b ...
+```
+
+A minimal `ollama_brain.py` adapter was then created using
+`subprocess.run(...)`.
+
+The Ollama adapter was changed to return the same `BrainResult` type as
+the MLX backend.
+
+The current subprocess implementation is intentionally minimal. A future
+Ollama HTTP/API adapter could expose richer metrics and remove the CLI
+subprocess layer, but this is not required for the current continuity
+experiment.
+
+## 8. Why Qwen Was Not Moved Into Ollama
+
+Qwen currently uses an MLX-format model in the Hugging Face cache, while
+Llama is managed by Ollama.
+
+Converting/importing the MLX Qwen model into Ollama was not pursued
+because it could create duplicate model storage and would weaken the
+experiment by making both candidate Brains depend on the same runtime
+manager.
+
+Keeping:
+
+``` text
+Qwen → MLX
+Llama → Ollama
+```
+
+makes the replacement test stronger: both the model and runtime can
+change while the Companion-facing boundary remains stable.
+
+## 9. Unified Brain Interface
+
+A minimal `brain_interface.py` was introduced with the conceptual public
+call:
+
+``` python
+generate(context, backend="mlx")
+generate(context, backend="ollama")
+```
+
+The rest of Companion should not need to know about MLX, Ollama,
+Qwen-specific behavior, or Llama-specific behavior.
+
+The intended boundary is:
+
+``` text
+Companion
+    ↓
+Brain Interface
+    ↓
+Backend Adapter
+    ├── Qwen / MLX
+    ├── Llama / Ollama
+    ├── future GPT adapter
+    └── future Claude adapter
+```
+
+Model-specific protocol differences belong inside the adapter layer.
+
+## 10. First Brain-Swap Test
+
+The same context was sent through both backends:
+
+``` text
+Explain in one short sentence what memory means for an AI companion.
+```
+
+The MLX path successfully invoked Qwen and returned:
+
+``` text
+Model: mlx-community/Qwen3.5-9B-4bit
+Backend: mlx
+```
+
+The Ollama path successfully invoked Llama and returned:
+
+``` text
+Model: llama3.1:8b
+Backend: ollama
+```
+
+Therefore the first minimal Brain-Swap Test succeeded.
+
+The important result is architectural, not a judgment about which model
+is better:
+
+``` text
+same Companion-facing interface
+→ different model
+→ different runtime
+→ normalized result
+```
+
+This establishes the minimum Replaceable Intelligence boundary required
+for the next C1 work.
+
+## 11. Qwen Thinking / Chat-Template Issue
+
+During the swap test, Qwen emitted reasoning-style content beginning
+with `<think>` and used the 100-token generation budget before reaching
+a concise final answer.
+
+An attempted `enable_thinking=False` change at the generation-call level
+did not solve the behavior.
+
+Investigation indicated that Qwen's model-specific chat template /
+prompt protocol needs proper backend handling rather than passing a raw
+string directly.
+
+This led to a broader architectural observation:
+
+``` text
+model/runtime differences
++
+prompt protocol differences
+→ should terminate inside the backend adapter
+```
+
+However, continuing to investigate Qwen-vs-Llama output behavior was
+judged to have diminishing value for the current C1 objective.
+
+Decision:
+
+**Record the Qwen thinking/chat-template behavior as a known backend
+issue and defer it.**
+
+It does not block the central continuity experiment.
+
+## 12. Decision: Stop Model Comparison
+
+The session explicitly rejected spending further time comparing Qwen and
+Llama differences.
+
+The purpose of the two-Brain experiment was to prove replaceability, not
+to benchmark or rank the models.
+
+That proof is now sufficient for the current stage.
+
+Future model/backend adaptation should happen only when a concrete
+incompatibility blocks Companion behavior.
+
+## 13. New Resume Point --- Persistent Experience
+
+The main path now advances to:
+
+``` text
+User
+→ Companion
+→ Brain
+→ Response
+→ save Experience
+
+later interaction
+→ load prior Experience
+→ provide relevant continuity context
+→ Brain
+→ response informed by prior experience
+```
+
+The first implementation should remain simple and inspectable.
+
+Do not begin with:
+
+``` text
+vector database
+embedding pipeline
+complex memory taxonomy
+large retrieval framework
+```
+
+Instead:
+
+1.  Save a small number of real experiences.
+2.  Reuse them in later interactions.
+3.  Observe what fails as the experience set grows.
+4.  Introduce retrieval/embeddings only when the observed problem
+    requires them.
+
+This preserves the project's project-first / just-in-time learning
+principle.
+
+## 14. Current Open Issues
+
+-   Design the smallest Persistent Experience representation.
+-   Decide when an interaction becomes durable experience.
+-   Preserve provenance so later Brains can reinterpret important
+    memories.
+-   Keep durable state under Companion control rather than
+    model-provider control.
+-   Observe when naive experience loading becomes insufficient.
+-   Revisit Qwen chat-template normalization only if it becomes relevant
+    to the active experiment.
+-   Later measure continuity across Brain swaps rather than comparing
+    models in isolation.
+
+## 15. Exact Resume Instruction
+
+Resume with **Companion-1: First Persistent Experience**.
+
+Do not return to Qwen/Llama comparison unless it blocks the next
+experiment.
+
+Build the simplest transparent persistence path first, then perform a
+real two-interaction continuity test.
+
 # Project Companion — Baseline Discussion Log
 
 Created: 2026-10-02
